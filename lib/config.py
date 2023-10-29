@@ -15,11 +15,11 @@ CONF.PATH.SIMULATOR_STEERING_ANGLE = os.path.join(CONF.PATH.DATA, "driving_log.c
 # Dataset
 CONF.data = EasyDict()
 CONF.data.source = 'Download'  # 'Download', 'Simulator'  # TODO: change this
-CONF.data.sequence_length = 6
+CONF.data.sequence_length = 5
 
 # Datamodule
 CONF.datamodule = EasyDict()
-CONF.datamodule.batch_size = 32
+CONF.datamodule.batch_size = 8
 CONF.datamodule.train_val_split = 0.9
 
 # Best Model
