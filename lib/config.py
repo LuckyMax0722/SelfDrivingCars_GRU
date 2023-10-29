@@ -22,6 +22,14 @@ CONF.datamodule = EasyDict()
 CONF.datamodule.batch_size = 8
 CONF.datamodule.train_val_split = 0.9
 
+# GRU Model
+CONF.gru_model = EasyDict()
+CONF.gru_model.input_size = 2048
+CONF.gru_model.hidden_size = 512
+CONF.gru_model.num_layers = 1
+
+
+
 # Best Model
 CONF.model = EasyDict()
 CONF.model.best_model = '/home/jiachen/SelfDrivingCars/output/model/model_Resnet50.pth'  # TODO: change this

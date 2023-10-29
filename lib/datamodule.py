@@ -33,5 +33,5 @@ class SimulatorDataModule(pl.LightningDataModule):
 
     def val_dataloader(self):
         print("val data: ", len(self.val_dataset))
-        return DataLoader(self.val_dataset, batch_size=self.batch_size)
+        return DataLoader(self.val_dataset, batch_size=self.batch_size, shuffle=True)
 

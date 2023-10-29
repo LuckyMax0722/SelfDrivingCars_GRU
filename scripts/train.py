@@ -1,17 +1,18 @@
 import pytorch_lightning as pl
 from lib.datamodule import SimulatorDataModule
-from model.E2EResNet import E2EResNet
+from model.E2ERNN import E2ERNN
 
 # prepare dataset and dataloader
 data = SimulatorDataModule()
 
-model = E2EResNet()
+model = E2ERNN()
 
 # start training
 trainer = pl.Trainer(accelerator='gpu',
                      devices=1,
-                     max_epochs=10,
-                     log_every_n_steps=10,
+                     max_epochs=1,
+                     log_every_n_steps=5,
+                     limit_train_batches=15
                      )
 
 trainer.fit(model, data)
