@@ -14,7 +14,7 @@ CONF.PATH.SIMULATOR_STEERING_ANGLE = os.path.join(CONF.PATH.DATA, "driving_log.c
 
 # Dataset
 CONF.data = EasyDict()
-CONF.data.source = 'Download'  # 'Download', 'Simulator'  # TODO: change this
+CONF.data.source = 'Simulator'  # 'Download', 'Simulator'  # TODO: change this
 CONF.data.sequence_length = 5
 
 # Datamodule
@@ -28,8 +28,6 @@ CONF.gru_model.input_size = 2048
 CONF.gru_model.hidden_size = 512
 CONF.gru_model.num_layers = 1
 
-
-
 # Best Model
 CONF.model = EasyDict()
-CONF.model.best_model = '/home/jiachen/SelfDrivingCars/output/model/model_Resnet50.pth'  # TODO: change this
+CONF.model.best_model = '/home/jiachen/SelfDrivingCars_GRU/output/model/model1030_20:47:45_epoch4.pth'  # TODO: change this

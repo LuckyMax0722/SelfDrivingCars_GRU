@@ -19,9 +19,8 @@ class E2ERNN(pl.LightningModule):
         self.gru = nn.GRU(input_size, hidden_size, num_layers, batch_first=True)
         self.fc = nn.Linear(hidden_size, 1)
 
-    def training_step(self, batch):
-        stacked_images, label = batch
-        unstacked_images = [stacked_images[:, i, :, :, :] for i in range(self.sequence_length)]
+    def forward(self, x):
+        unstacked_images = [x[:, i, :, :, :] for i in range(self.sequence_length)]
 
         logits = []
         for idx in range(self.sequence_length):
@@ -31,24 +30,37 @@ class E2ERNN(pl.LightningModule):
         _, hn = self.gru(images_feature)
         out = self.fc(hn[0])
         out = out.squeeze(-1)
+
+        return out
+
+    def training_step(self, batch):
+        stacked_images, label = batch
+        # stacked_images --> torch.Size([batch_size, sequence_length, 3, 160, 320])
+        out = self(stacked_images)
 
         loss = nn.MSELoss()(out.float(), label.float())  # use L2 loss
         self.log('train_loss', loss, on_step=True, prog_bar=True, logger=True)
 
         return loss
 
+    def on_train_epoch_end(self):  # save the model
+        params = self.state_dict()
+        # to cpu
+        params_cpu = {k: v.cpu() for k, v in params.items()}
+        # save model file
+        self.filename = CONF.PATH.OUTPUT_MODEL
+        self.filename += 'model1030_'
+        current_time = datetime.datetime.now()
+        time_string = current_time.strftime("%H:%M:%S")
+        self.filename += time_string
+        self.filename += f'_epoch{self.current_epoch}.pth'
+        torch.save(params_cpu, self.filename)
+        return None
+
     def validation_step(self, batch, batch_idx):
         stacked_images, label = batch
-        unstacked_images = [stacked_images[:, i, :, :, :] for i in range(self.sequence_length)]
 
-        logits = []
-        for idx in range(self.sequence_length):
-            logits.append(self.resnet50(unstacked_images[idx]))
-        images_feature = torch.stack(logits, dim=1)
-
-        _, hn = self.gru(images_feature)
-        out = self.fc(hn[0])
-        out = out.squeeze(-1)
+        out = self(stacked_images)
 
         loss = nn.MSELoss()(out.float(), label.float())  # use L2 loss
         self.log('val_loss', loss, on_step=True, prog_bar=True, logger=True)

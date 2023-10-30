@@ -10,11 +10,11 @@ model = E2ERNN()
 # start training
 trainer = pl.Trainer(accelerator='gpu',
                      devices=1,
-                     max_epochs=1,
+                     max_epochs=10,
                      log_every_n_steps=5,
-                     limit_train_batches=15
+                     #limit_train_batches=15
                      )
 
 trainer.fit(model, data)
 
-# tensorboard --logdir=/home/jiachen/SelfDrivingCars/scripts/lightning_logs
+# tensorboard --logdir=/home/jiachen/SelfDrivingCars_GRU/scripts/lightning_logs
